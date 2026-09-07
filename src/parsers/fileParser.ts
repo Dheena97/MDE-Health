@@ -63,6 +63,7 @@ function parseCsv(file: File): Promise<ParseResult> {
       header: true,
       skipEmptyLines: true,
       dynamicTyping: false, // Keep all values as strings for consistent handling
+      worker: true, // Keep large MDE CSV parsing off the browser's main thread
       complete: (results) => {
         if (results.errors.length > 0) {
           const criticalErrors = results.errors.filter(e => e.type === 'Delimiter' || e.type === 'FieldMismatch');
