@@ -4,7 +4,7 @@ import Papa from 'papaparse';
 type Report = { file: string; rows: number; devices: Set<string> };
 const norm = (v: unknown) => String(v ?? '').trim().toLowerCase().split('.')[0];
 
-function readCsv(file: File, label: string, progress: (n: number) => void): Promise<Report> {
+function readCsv(file: File, progress: (n: number) => void): Promise<Report> {
   return new Promise((resolve, reject) => {
     let rows = 0; let column = ''; const devices = new Set<string>();
     Papa.parse<Record<string, string>>(file, {
@@ -27,7 +27,7 @@ export default function App() {
   const summary = useMemo(() => { if (!intune || !mde) return null; let matched = 0; intune.devices.forEach(d => { if (mde.devices.has(d)) matched++; }); return { matched, missing: intune.devices.size - matched, rate: intune.devices.size ? Math.round(matched * 100 / intune.devices.size) : 0 }; }, [intune, mde]);
   const upload = async (event: ChangeEvent<HTMLInputElement>, type: 'intune' | 'mde') => {
     const file = event.target.files?.[0]; if (!file) return; setError(''); setBusy(type === 'intune' ? 'Reading Intune export' : 'Reading MDE health report'); setPercent(0);
-    try { const report = await readCsv(file, busy, setPercent); if (type === 'intune') setIntune(report); else setMde(report); } catch (e) { setError(e instanceof Error ? e.message : 'Could not read this CSV.'); } finally { setBusy(''); event.target.value = ''; }
+    try { const report = await readCsv(file, setPercent); if (type === 'intune') setIntune(report); else setMde(report); } catch (e) { setError(e instanceof Error ? e.message : 'Could not read this CSV.'); } finally { setBusy(''); event.target.value = ''; }
   };
   return <main style={{ minHeight:'100vh', background:'#f4f7fb', color:'#172033', fontFamily:'Arial,sans-serif', padding:'48px max(24px,8vw)' }}>
     <p style={{ color:'#2563eb', fontWeight:800, letterSpacing:2 }}>MDE HEALTH</p><h1 style={{ fontSize:48, margin:'8px 0' }}>Large CSV health assessment</h1><p style={{ color:'#61708a', maxWidth:700 }}>Files are read in 512 KB chunks with live progress. Nothing is uploaded; data stays in this browser.</p>
