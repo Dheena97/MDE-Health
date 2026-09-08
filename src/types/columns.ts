@@ -155,7 +155,7 @@ export const MDE_FIELDS: FieldDefinition[] = [
       'antivirus signature version', 'signature version',
       'antivirus security intelligence version',
       'security intelligence version', 'av signature version',
-      'av signature', 'definition version',
+      'av signature', 'signature', 'definition version',
       'antivirus_signature_version', 'security_intelligence_version',
     ],
     description: 'Antivirus signature/security intelligence version',
@@ -166,7 +166,7 @@ export const MDE_FIELDS: FieldDefinition[] = [
     required: false,
     type: 'date',
     aliases: [
-      'signature update date', 'signature update time', 'signature date', 'signature updated',
+      'signature update date', 'signature date', 'signature updated',
       'definition update date', 'security intelligence update',
       'last signature update', 'signature_update_date',
       'av signature update', 'last definition update',
