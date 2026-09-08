@@ -107,13 +107,7 @@ export function detectIntuneColumns(headers: string[]): ColumnMapping[] {
  */
 export function detectMdeColumns(headers: string[]): ColumnMapping[] {
   const saved = loadSavedMappings(STORAGE_KEY_MDE, headers);
-  if (saved) {
-    return saved.map(mapping =>
-      mapping.sourceColumn.toLowerCase().trim() === 'signature update time'
-        ? { ...mapping, targetField: 'signatureUpdateDate', confidence: 1, isManual: false }
-        : mapping
-    );
-  }
+  if (saved) return saved;
   return autoDetectColumns(headers, MDE_FIELDS);
 }
 
